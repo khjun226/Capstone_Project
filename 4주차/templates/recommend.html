@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>추천 영상</title>
+</head>
+<body>
+    <h1>추천 영상</h1>
+    <h2>같은 가수의 다른 곡</h2>
+    {% if same_artist_results %}
+    <ul>
+        {% for item in same_artist_results %}
+        <li style="margin-bottom: 10px;">
+            <img src="{{ item.thumbnail }}" alt="thumbnail">
+            <strong>{{ item.title }}</strong>
+            <form action="{{ url_for('add_to_playlist') }}" method="POST" style="display:inline;">
+                <input type="hidden" name="video_id" value="{{ item.video_id }}">
+                <input type="hidden" name="title" value="{{ item.title }}">
+                <button type="submit">플레이리스트에 추가</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>추천할 영상이 없습니다.</p>
+    {% endif %}
+
+    <h2>유사 장르의 다른 곡</h2>
+    {% if related_results %}
+    <ul>
+        {% for item in related_results %}
+        <li style="margin-bottom: 10px;">
+            <img src="{{ item.thumbnail }}" alt="thumbnail">
+            <strong>{{ item.title }}</strong>
+            <form action="{{ url_for('add_to_playlist') }}" method="POST" style="display:inline;">
+                <input type="hidden" name="video_id" value="{{ item.video_id }}">
+                <input type="hidden" name="title" value="{{ item.title }}">
+                <button type="submit">플레이리스트에 추가</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>추천할 영상이 없습니다.</p>
+    {% endif %}
+    
+    <br>
+    <a href="{{ url_for('search_page') }}">다시 검색하기</a>
+    <br>
+    <a href="{{ url_for('show_playlist') }}">플레이리스트 보기</a>
+</body>
+</html>

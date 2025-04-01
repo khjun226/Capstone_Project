@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Playlist</title>
+</head>
+<body>
+    <h1>내 플레이리스트</h1>
+    {% if playlist %}
+    <ul>
+        {% for item in playlist %}
+        <li>
+            <strong>{{ item.title }}</strong>
+            <form action="{{ url_for('play') }}" method="POST" style="display:inline;">
+                <input type="hidden" name="video_id" value="{{ item.video_id }}">
+                <button type="submit">재생</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>플레이리스트가 비어 있습니다.</p>
+    {% endif %}
+    <br>
+    <a href="{{ url_for('index') }}">메인 페이지로 돌아가기</a>
+</body>
+</html>
