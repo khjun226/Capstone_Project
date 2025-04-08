@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>검색 결과</title>
+</head>
+<body>
+    <h1>"{{ query }}" 검색 결과</h1>
+    <ul>
+        {% for item in results %}
+        <li style="margin-bottom: 10px;">
+            <img src="{{ item.thumbnail }}" alt="thumbnail">
+            <strong>{{ item.title }}</strong> by <em>{{ item.artist }}</em>
+            <form action="{{ url_for('add_to_playlist') }}" method="POST" style="display:inline;">
+                <input type="hidden" name="video_id" value="{{ item.video_id }}">
+                <input type="hidden" name="title" value="{{ item.title }} - {{ item.artist }}">
+                <button type="submit">플레이리스트에 추가</button>
+            </form>
+            
+            <form action="{{ url_for('recommend_lastfm') }}" method="POST" style="display:inline; margin-left: 10px;">
+                <input type="hidden" name="video_id" value="{{ item.video_id }}">
+                <input type="hidden" name="title" value="{{ item.title }}">
+                <input type="hidden" name="artist" value="{{ item.artist }}">
+                <button type="submit">추천음악 보기 </button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('search_page') }}">다시 검색하기</a>
+    <br><br>
+    <a href="{{ url_for('playlist') }}">내 플레이리스트 보기</a>
+</body>
+</html>
