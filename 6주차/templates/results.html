@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>"{{ query }}" 검색 결과</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    /* 결과 카드 그리드 스타일 (추가 CSS, style.css에 병합해도 됨) */
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+    .result-card {
+      background: #2b2b2b;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+    .result-card:hover {
+      transform: scale(1.03);
+    }
+    .result-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+      object-fit: cover;
+    }
+    .track-name {
+      font-weight: bold;
+      margin-bottom: 0.3rem;
+      color: #fff;
+    }
+    .artist-name {
+      font-size: 0.9rem;
+      color: #bbb;
+      margin-bottom: 0.5rem;
+    }
+    .card-btn {
+      background: #1DB954;
+      border: none;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .card-btn:hover {
+      background: #1ed760;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>"{{ query }}" 검색 결과</h1>
+    <div class="results-grid">
+      {% for track in results %}
+      <div class="result-card">
+        {% if track.album.images and track.album.images[0].url %}
+          <img src="{{ track.album.images[0].url }}" alt="앨범 커버">
+        {% else %}
+          <img src="https://via.placeholder.com/180" alt="앨범 없음">
+        {% endif %}
+        <div class="track-name">{{ track.name }}</div>
+        <div class="artist-name">
+          {% for artist in track.artists %}
+            {{ artist.name }}{% if not loop.last %}, {% endif %}
+          {% endfor %}
+        </div>
+        <!-- 플레이리스트 추가 폼: 드롭다운 및 직접 입력 필드를 제거 -->
+        <form class="add-playlist-form" action="{{ url_for('add_to_playlist') }}" method="POST">
+          <input type="hidden" name="track_id" value="{{ track.id }}">
+          <input type="hidden" name="preview_url" value="{{ track.preview_url }}">
+          <input type="hidden" name="track_name" value="{{ track.name }}">
+          <input type="hidden" name="artist" value="{% for artist in track.artists %}{{ artist.name }}{% if not loop.last %}, {% endif %}{% endfor %}">
+          <input type="hidden" name="album_image" value="{{ track.album.images[0].url if track.album.images }}">
+          <!-- hidden 필드에 플레이리스트 이름 저장 (JS 통해 입력) -->
+          <input type="hidden" name="playlist_name" class="playlist-name-field">
+          <!-- 버튼들: 플레이리스트 추가 및 추천 곡 보기 -->
+          <button type="button" class="card-btn add-btn">플레이리스트에 추가</button>
+          <a href="{{ url_for('track_detail', track_id=track.id) }}" class="card-btn recommendation-btn">추천 곡 보기</a>
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+    <p><a class="card-btn" href="{{ url_for('search') }}">다시 검색하기</a></p>
+    <p><a class="card-btn" href="{{ url_for('playlists') }}">플레이리스트 목록 보기</a></p>
+  </div>
+
+  <!-- JavaScript: 플레이리스트 추가 버튼 클릭 시 프롬프트 이용 -->
+  <script>
+    // 모든 "플레이리스트에 추가" 버튼에 이벤트 리스너 부착
+    document.querySelectorAll('.add-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        // 프롬프트를 통해 플레이리스트 이름 입력 받기
+        let playlistName = prompt("추가할 플레이리스트 이름을 입력하세요.\n(이미 존재하는 이름을 입력하면 해당 플레이리스트에 추가됩니다.)", "");
+        if (playlistName === null) {
+          // 사용자가 취소한 경우 작업 중단
+          return;
+        }
+        // 값이 없으면 기본값("default") 사용
+        if (playlistName.trim() === "") {
+          playlistName = "default";
+        }
+        // 같은 폼 내부의 hidden 필드에 입력된 값을 넣고 폼 submit 실행
+        const form = btn.closest('.add-playlist-form');
+        form.querySelector('.playlist-name-field').value = playlistName.trim();
+        form.submit();
+      });
+    });
+  </script>
+</body>
+</html>

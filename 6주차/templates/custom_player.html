@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+   <meta charset="UTF-8">
+   <title>플레이어 - {{ playlist_name }}</title>
+   <style>
+       .player-container {
+           width: 400px;
+           margin: 50px auto;
+           text-align: center;
+           background: #f8f8f8;
+           padding: 20px;
+           border-radius: 8px;
+       }
+       .album-art {
+           width: 200px;
+           margin: 0 auto;
+       }
+       .album-art img {
+           width: 100%;
+           border-radius: 8px;
+       }
+       .controls button {
+           margin: 10px;
+           padding: 10px 20px;
+           font-size: 1rem;
+       }
+   </style>
+</head>
+<body>
+  <div class="player-container">
+    <div class="album-art">
+       <img id="album-image" src="" alt="앨범 커버">
+    </div>
+    <h2 id="track-title"></h2>
+    <p id="track-artist"></p>
+    <audio id="audio-player" controls src="">
+       Your browser does not support audio.
+    </audio>
+    <div class="controls">
+      <button id="prev-btn">이전</button>
+      <button id="play-pause-btn">재생/일시정지</button>
+      <button id="next-btn">다음</button>
+    </div>
+    <p><a href="{{ url_for('playlist_detail', playlist_name=playlist_name) }}">플레이리스트로 돌아가기</a></p>
+  </div>
+  <script>
+    // 서버에서 전달된 playlist 배열: 각 요소는 { preview_url, track_name, artist, album_image }
+    const playlist = [
+      {% for track in playlist %}
+        {
+          preview_url: "{{ track.preview_url }}",
+          track_name: "{{ track.track_name|escape }}",
+          artist: "{{ track.artist|escape }}",
+          album_image: "{{ track.album_image|escape }}"
+        }{% if not loop.last %},{% endif %}
+      {% endfor %}
+    ];
+    let currentIndex = 0;
+    const audioPlayer = document.getElementById("audio-player");
+    const albumImageEl = document.getElementById("album-image");
+    const trackTitleEl = document.getElementById("track-title");
+    const trackArtistEl = document.getElementById("track-artist");
+    const playPauseBtn = document.getElementById("play-pause-btn");
+    const prevBtn = document.getElementById("prev-btn");
+    const nextBtn = document.getElementById("next-btn");
+
+    function updatePlayer() {
+      if (playlist.length === 0) return;
+      const track = playlist[currentIndex];
+      audioPlayer.src = track.preview_url;
+      albumImageEl.src = track.album_image;
+      trackTitleEl.textContent = track.track_name;
+      trackArtistEl.textContent = track.artist;
+      audioPlayer.play();
+      playPauseBtn.textContent = "일시정지";
+    }
+
+    playPauseBtn.addEventListener("click", function() {
+       if (audioPlayer.paused) {
+         audioPlayer.play();
+         playPauseBtn.textContent = "일시정지";
+       } else {
+         audioPlayer.pause();
+         playPauseBtn.textContent = "재생";
+       }
+    });
+
+    prevBtn.addEventListener("click", function() {
+       currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+       updatePlayer();
+    });
+
+    nextBtn.addEventListener("click", function() {
+       currentIndex = (currentIndex + 1) % playlist.length;
+       updatePlayer();
+    });
+
+    // 초기 플레이어 설정
+    updatePlayer();
+  </script>
+</body>
+</html>

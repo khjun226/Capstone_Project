@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>플레이리스트 목록 | My Playstify</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      text-align: center;
+      color: #fff;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      margin: 10px 0;
+    }
+    a.btn {
+      display: inline-block;
+      padding: 8px 16px;
+      background: #1DB954;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 20px;
+      transition: background 0.2s;
+    }
+    a.btn:hover {
+      background: #1ed760;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>내 플레이리스트</h1>
+    <ul>
+      {% for name, tracks in playlists.items() %}
+        <li>
+          <a class="btn" href="{{ url_for('playlist_detail', playlist_name=name) }}">
+            {{ name }} ({{ tracks|length }}곡)
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+    <p><a class="btn" href="{{ url_for('index') }}">홈으로 돌아가기</a></p>
+  </div>
+</body>
+</html>

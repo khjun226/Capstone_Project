@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ playlist_name }} 플레이리스트 | My Playstify</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      color: #fff;
+    }
+    .track-card {
+      display: flex;
+      align-items: center;
+      background: #2b2b2b;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .track-card img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 4px;
+      margin-right: 15px;
+    }
+    .track-details {
+      flex-grow: 1;
+    }
+    .track-details h4 {
+      margin: 0 0 5px 0;
+      font-size: 1rem;
+      color: #fff;
+    }
+    .track-details p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #bbb;
+    }
+    .delete-btn {
+      background: #e74c3c;
+      border: none;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .delete-btn:hover {
+      background: #c0392b;
+    }
+    a.btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #1DB954;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 20px;
+      transition: background 0.2s;
+    }
+    a.btn:hover {
+      background: #1ed760;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>{{ playlist_name }} 플레이리스트</h1>
+    {% if tracks %}
+      {% for track in tracks %}
+        <div class="track-card">
+          <img src="{{ track.album_image }}" alt="앨범 커버">
+          <div class="track-details">
+            <h4>{{ track.track_name }}</h4>
+            <p>{{ track.artist }}</p>
+          </div>
+          <form action="{{ url_for('delete_song') }}" method="POST">
+            <input type="hidden" name="playlist_name" value="{{ playlist_name }}">
+            <input type="hidden" name="index" value="{{ loop.index0 }}">
+            <button type="submit" class="delete-btn">삭제</button>
+          </form>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>플레이리스트가 비어 있습니다.</p>
+    {% endif %}
+    <p><a class="btn" href="{{ url_for('playlists') }}">전체 플레이리스트 보기</a></p>
+    <p><a class="btn" href="{{ url_for('index') }}">홈으로 돌아가기</a></p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>노래 검색</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <div class="logo">My Playstify</div>
+    <form class="search-form" action="/search" method="post">
+      <input type="text" name="query" class="search-input" placeholder="노래 제목, 가수 등 검색">
+      <button type="submit" class="search-button">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+    </form>
+    <div class="playlist-icon" onclick="window.location.href='/playlists';">
+      <i class="fa-solid fa-record-vinyl"></i>
+    </div>
+  </div>
+</body>
+</html>

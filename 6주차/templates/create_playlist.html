@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>새 플레이리스트 생성</title>
+</head>
+<body>
+  <h1>새 플레이리스트 생성</h1>
+  <form action="{{ url_for('create_playlist') }}" method="post">
+    <input type="text" name="playlist_name" placeholder="플레이리스트 이름" required>
+    <button type="submit">생성</button>
+  </form>
+  <p><a href="{{ url_for('playlists') }}">플레이리스트 목록 보기</a></p>
+</body>
+</html>
