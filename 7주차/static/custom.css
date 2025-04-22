@@ -1,0 +1,516 @@
+
+/* Results 페이지 전용 스타일 (results.html)               */
+
+.results-container {
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 20px;
+    color: #fff;
+  }
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+  .result-card {
+    background: #2b2b2b;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+  .result-card:hover {
+    transform: scale(1.03);
+  }
+  .result-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    object-fit: cover;
+  }
+  .result-card .track-name {
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+    color: #fff;
+  }
+  .result-card .artist-name {
+    font-size: 0.9rem;
+    color: #bbb;
+    margin-bottom: 0.5rem;
+  }
+  .result-card .card-btn {
+    background: #1DB954;
+    border: none;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin: 0.5rem 0.2rem;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .result-card .card-btn:hover {
+    background: #1ed760;
+  }
+  
+  
+  /*  TrackDetail 페이지 전용 스타일 (track_detail.html)       */
+ 
+  .track-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    color: #fff;
+  }
+  .track-info {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 40px;
+    align-items: center;
+  }
+  .track-info img {
+    width: 220px;
+    border-radius: 8px;
+  }
+  .track-details h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+  .track-details p {
+    font-size: 1rem;
+    color: #bbb;
+  }
+  .rec-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+  }
+  .rec-card {
+    background: #1e1e1e;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+  .rec-card:hover {
+    transform: scale(1.05);
+  }
+  .rec-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    object-fit: cover;
+  }
+  .rec-card .rec-track-name {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #fff;
+  }
+  .rec-card .rec-artist {
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-bottom: 10px;
+  }
+  .rec-card .btn {
+    display: inline-block;
+    background: #1DB954;
+    padding: 8px 16px;
+    border-radius: 20px;
+    color: #fff;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .rec-card .btn:hover {
+    background: #1ed760;
+  }
+  
+  
+  /* ─── playlist_detail.html 전용 스타일 ─── */
+.playlist-detail-page {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px 40px;
+    color: #fff;
+  }
+  
+  .playlist-detail-page h1 {
+    font-size: 2.75rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+    border-bottom: 2px solid #444;
+    padding-bottom: 10px;
+  }
+  
+  .playlist-detail-page .track-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .playlist-detail-page .track-card {
+    display: flex;
+    align-items: center;
+    background: #2b2b2b;
+    border-radius: 10px;
+    padding: 12px 16px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+    transition: background 0.2s;
+  }
+  .playlist-detail-page .track-card:hover {
+    background: #3a3a3a;
+  }
+  
+  .playlist-detail-page .track-card img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-right: 20px;
+    flex-shrink: 0;
+  }
+  
+  .playlist-detail-page .track-details {
+    flex-grow: 1;
+  }
+  .playlist-detail-page .track-details h4 {
+    margin: 0;
+    font-size: 1.25rem;
+    line-height: 1.2;
+  }
+  .playlist-detail-page .track-details p {
+    margin: 4px 0 0;
+    font-size: 1rem;
+    color: #bbb;
+  }
+  
+  /* 삭제 버튼 */
+  .playlist-detail-page .delete-btn {
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .playlist-detail-page .delete-btn:hover {
+    background: #c0392b;
+    transform: scale(1.05);
+  }
+  
+  /* 하단 네비게이션 버튼 */
+  .playlist-detail-page .nav-buttons {
+    margin-top: 40px;
+    display: flex;
+    gap: 12px;
+  }
+  .playlist-detail-page .nav-buttons .btn {
+    flex: none;
+  }
+  
+  /* ─── playlists.html 전용 스타일 ─── */
+.playlists-page {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 0 20px 40px;
+    color: #fff;
+  }
+  
+  .playlists-page h1 {
+    font-size: 2.75rem;
+    margin-bottom: 24px;
+    font-weight: 700;
+    border-bottom: 2px solid #444;
+    padding-bottom: 12px;
+  }
+  
+  .playlists-page .playlist-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .playlists-page .playlist-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #2b2b2b;
+    border-radius: 8px;
+    padding: 12px 16px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+    transition: background 0.2s;
+  }
+  .playlists-page .playlist-card:hover {
+    background: #3a3a3a;
+  }
+  
+  .playlists-page .playlist-name {
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+  
+  .playlists-page .playlist-actions {
+    display: flex;
+    gap: 8px;
+  }
+  
+  /* custom.css 에서 수정할 부분 */
+
+.playlists-page .view-playlist-btn,
+.playlists-page .delete-playlist-btn {
+  display: inline-block;
+  padding: 6px 12px;     /* ↘ padding을 작게 */
+  font-size: 0.9rem;     /* ↘ 폰트 크기를 작게 */
+  border-radius: 18px;   /* 약간 덜 둥글어도 괜찮다면  */
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  text-decoration: none;
+}
+
+/* 보기 버튼 */
+.playlists-page .view-playlist-btn {
+  background: #1DB954;
+  color: #fff;
+}
+.playlists-page .view-playlist-btn:hover {
+  background: #1ed760;
+  transform: scale(1.03);  /* hover 스케일도 살짝 줄임 */
+}
+
+/* 삭제 버튼 */
+.playlists-page .delete-playlist-btn {
+  background: #e74c3c;
+  color: #fff;
+  margin-left: 6px;       /* 버튼 간격도 조금 좁힘 */
+}
+.playlists-page .delete-playlist-btn:hover {
+  background: #c0392b;
+  transform: scale(1.03);
+}
+
+
+/* ───────────────────────────────────────── */
+/*                  Player                  */
+/* ───────────────────────────────────────── */
+.player-container {
+  max-width: 400px;
+  margin: 40px auto;
+  background: #2b2b2b;
+  padding: 24px;
+  border-radius: 12px;
+  text-align: center;
+}
+.album-art img {
+  width: 100%;
+  border-radius: 8px;
+}
+.track-info h2 {
+  margin: 16px 0 4px;
+  color: #fff;
+  font-size: 1.5rem;
+}
+.track-info p {
+  margin: 0 0 20px;
+  color: #bbb;
+  font-size: 1rem;
+}
+.progress-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.progress-container span {
+  color: #ccc;
+  font-size: 0.9rem;
+  width: 40px;
+}
+.progress-container input[type="range"] {
+  flex: 1;
+  cursor: pointer;
+}
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+.control-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.control-btn:hover {
+  color: #1DB954;
+}
+
+/* ───────────────────────────────────────── */
+/*              Player UI 개선               */
+/* ───────────────────────────────────────── */
+.player-container {
+  max-width: 400px;
+  margin: 40px auto;
+  background: #2b2b2b;
+  padding: 24px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+/* 트랙 메타 정보 중앙 정렬 및 간격 조정 */
+.track-info {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.track-info h2 {
+  margin: 0 0 4px;
+  font-size: 1.75rem;
+  color: #fff;
+}
+.track-info p {
+  margin: 0;
+  font-size: 1rem;
+  color: #aaa;
+}
+
+/* 컨트롤 버튼 • 원형 배경 • 간격 넓히기 */
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+}
+.control-btn {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1DB954;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 1.5rem;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+.control-btn:hover {
+  background: #1ed760;
+  transform: scale(1.1);
+}
+
+/* 진행 바 • 글자 크기 조정 */
+.progress-container span {
+  font-size: 0.85rem;
+  color: #ccc;
+}
+
+/*         Playlist Detail UI 개선           */
+
+.playlist-detail-page {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px 40px;
+  color: #fff;
+}
+/* 제목과 플레이 버튼 사이에 충분한 여백 추가 */
+.playlist-detail-page h1 {
+  font-size: 2.75rem;
+  margin-bottom: 12px; /* 제목 아래 여백 */
+  border-bottom: 2px solid #444;
+  padding-bottom: 10px;
+}
+.playlist-detail-page > p {
+  margin: 20px 0; /* 재생하기 버튼 위/아래 여백 */
+}
+/* 삭제 버튼과 네비게이션 버튼 크기·간격 조정 */
+.playlist-detail-page .nav-buttons {
+  margin-top: 40px;
+  display: flex;
+  gap: 12px;
+}
+.playlist-detail-page .btn {
+  padding: 10px 20px;
+  border-radius: 20px;
+}
+
+/*          Search Results 페이지 하단 링크          */
+
+.results-page > p {
+  text-align: center;
+  margin-top: 24px;
+}
+.results-page > p .card-btn {
+  display: inline-block;
+  padding: 10px 24px;
+  font-size: 1rem;
+  background: #1DB954;
+  color: #fff;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: background 0.2s;
+  margin: 8px;
+}
+.results-page > p .card-btn:hover {
+  background: #1ed760;
+}
+
+
+/*    결과 카드 내 “플레이리스트에 추가” 버튼 텍스트 한 줄 유지    */
+
+.results-page .result-card .card-btn {
+  white-space: nowrap;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+}
+
+
+/*        Playlist에 추가 버튼 조금 더 슬림하게        */
+
+.result-card .card-btn.add-btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.move-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px;
+  margin-bottom: 4px;
+  transition: color 0.2s;
+}
+.move-btn:hover:not([disabled]) {
+  color: #1DB954;
+}
+.move-btn[disabled] {
+  opacity: 0.4;
+  cursor: default;
+}
+
+
+/* ───────────────────────────────────────── */
+/*                  Player                  */
+/* ───────────────────────────────────────── */
+
+/* 이동 버튼(↑↓)과 삭제 버튼 사이 간격 주기 */
+.move-controls {
+  display: inline-flex;
+  gap: 4px;           /* ↑/↓ 버튼 사이 간격 */
+  margin-right: 16px; /* 삭제 버튼과의 간격 */
+  vertical-align: middle;
+}

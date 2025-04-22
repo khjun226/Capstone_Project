@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ playlist_name }} 플레이리스트 | My Playstify</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
+</head>
+<body>
+  <div class="container playlist-detail-page">
+    <h1>{{ playlist_name }} 플레이리스트</h1>
+
+    <!-- 재생하기 버튼 -->
+    <p>
+      <a class="btn" href="{{ url_for('player', playlist_name=playlist_name) }}">
+        ▶︎ 재생하기
+      </a>
+    </p>
+
+    <ul class="track-list">
+      {% for idx, track in enumerate(tracks) %}
+        <li class="track-card">
+          <img src="{{ track.thumbnail or url_for('static','placeholder.jpg') }}" alt="앨범 커버">
+
+          <div class="track-details">
+            <!-- 제목만, 가수는 title에 이미 포함되어 있다고 가정 -->
+            <h4 style="text-align: center;">
+              {{ idx + 1 }}. {{ track.title }}
+            </h4>
+            <!-- 아래의 <p>{{ track.artist }}</p> 를 제거했습니다. -->
+          </div>
+
+          <!-- 화살표 이동 버튼 -->
+          <div class="move-controls">
+            <form action="{{ url_for('move_song') }}" method="POST" style="display:inline;">
+              <input type="hidden" name="playlist_name" value="{{ playlist_name }}">
+              <input type="hidden" name="index" value="{{ idx }}">
+              <input type="hidden" name="direction" value="up">
+              <button type="submit" class="move-btn" {% if idx == 0 %}disabled{% endif %}>↑</button>
+            </form>
+            <form action="{{ url_for('move_song') }}" method="POST" style="display:inline;">
+              <input type="hidden" name="playlist_name" value="{{ playlist_name }}">
+              <input type="hidden" name="index" value="{{ idx }}">
+              <input type="hidden" name="direction" value="down">
+              <button type="submit" class="move-btn" {% if idx == tracks|length-1 %}disabled{% endif %}>↓</button>
+            </form>
+          </div>
+
+          <!-- 삭제 버튼 -->
+          <form action="{{ url_for('delete_song') }}" method="POST">
+            <input type="hidden" name="playlist_name" value="{{ playlist_name }}">
+            <input type="hidden" name="index" value="{{ idx }}">
+            <button type="submit" class="delete-btn">삭제</button>
+          </form>
+        </li>
+      {% else %}
+        <li class="track-card empty">플레이리스트가 비어 있습니다.</li>
+      {% endfor %}
+    </ul>
+
+    <div class="nav-buttons">
+      <a class="btn" href="{{ url_for('playlists') }}">전체 플레이리스트 보기</a>
+      <a class="btn" href="{{ url_for('index') }}">홈으로 돌아가기</a>
+    </div>
+  </div>
+</body>
+</html>

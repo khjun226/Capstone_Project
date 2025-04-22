@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>내 플레이리스트 | My Playstify</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
+</head>
+<body>
+  <div class="container playlists-page">
+    <h1>내 플레이리스트</h1>
+    <ul class="playlist-list">
+      {% for name, tracks in playlists.items() %}
+        <li>
+          <div class="playlist-card">
+            <div class="playlist-name">
+              {{ name }} ({{ tracks|length }}곡)
+            </div>
+            <div class="playlist-actions">
+              <a class="btn" href="{{ url_for('playlist_detail', playlist_name=name) }}">보기</a>
+              <form action="{{ url_for('delete_playlist') }}" method="POST" style="margin:0;">
+                <input type="hidden" name="playlist_name" value="{{ name }}">
+                <button type="submit" class="delete-playlist-btn">삭제</button>
+              </form>
+            </div>
+          </div>
+        </li>
+      {% else %}
+        <li class="track-card empty">플레이리스트가 없습니다.</li>
+      {% endfor %}
+    </ul>
+
+    <div style="margin-top: 30px;">
+      <a class="btn" href="{{ url_for('index') }}">홈으로 돌아가기</a>
+    </div>
+  </div>
+</body>
+</html>

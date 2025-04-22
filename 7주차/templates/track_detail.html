@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ track.name }} | My Playstify</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
+</head>
+<body>
+  <div class="container track-detail-page">
+    <div class="track-info">
+      <img src="{{ track.album.images[0].url }}" alt="앨범 커버">
+      <div class="track-details">
+        <h1>{{ track.name }}</h1>
+        <p>
+          {% for artist in track.artists %}
+            {{ artist.name }}{% if not loop.last %}, {% endif %}
+          {% endfor %}
+        </p>
+        <p>발매일: {{ track.album.release_date }}</p>
+        <p>인기도: {{ track.popularity }}</p>
+      </div>
+    </div>
+
+    <h2>이 노래를 기반으로 추천곡</h2>
+    <div class="rec-grid">
+      {% for rec in recommendations %}
+      <div class="rec-card">
+        <img src="{{ rec.album_image or url_for('static','placeholder.jpg') }}" alt="앨범 커버">
+        <h3 class="rec-track-name">{{ rec.name }}</h3>
+        <p class="rec-artist">{{ rec.artist.name }}</p>
+
+        <form class="add-form"
+              action="{{ url_for('add_to_playlist') }}"
+              method="POST"
+              onsubmit="return askPlaylistName(this);">
+          <!-- 필수 hidden 필드 -->
+          <input type="hidden" name="song_id"   value="{{ rec.mbid or rec.name }}">
+          <input type="hidden" name="preview_url" value="">
+          <input type="hidden" name="title"     value="{{ rec.name }} - {{ rec.artist.name }}">
+          <input type="hidden" name="artist"    value="{{ rec.artist.name }}">
+          <input type="hidden" name="thumbnail" value="{{ rec.album_image }}">
+          <button type="submit" class="btn">플레이리스트에 추가</button>
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- 네비게이션 버튼 추가 -->
+    <div class="nav-buttons" style="text-align:center; margin-top: 40px;">
+      <a class="btn" href="{{ url_for('index') }}">홈으로 돌아가기</a>
+      <a class="btn" href="{{ url_for('playlists') }}">내 플레이리스트 보기</a>
+    </div>
+  </div>
+
+  <script>
+    function askPlaylistName(form) {
+      const name = prompt(
+        "추가할 플레이리스트 이름을 입력하세요.\n" +
+        "(기존 이름을 입력하면 해당 플레이리스트에 추가됩니다.)"
+      );
+      if (!name) return false;
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = "playlist_name";
+      input.value = name.trim();
+      form.appendChild(input);
+      return true;
+    }
+  </script>
+</body>
+</html>

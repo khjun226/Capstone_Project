@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+  <title>노래 검색 | My Playstify</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <!-- 공통 스타일 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+  <!-- 페이지별 커스텀 스타일 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}"/>
+</head>
+<body class="search-page">
+  <div class="container search-page-container">
+    <!-- 로고 -->
+    <h1 class="logo">My Playstify</h1>
+
+    <!-- 검색 폼 -->
+    <form class="search-form" action="/search" method="post">
+      <input
+        type="text"
+        name="query"
+        class="search-input"
+        placeholder="노래 제목, 가수 등 검색"
+        required
+      />
+      <button type="submit" class="search-button">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+    </form>
+
+    <!-- 플레이리스트 이동 아이콘 -->
+    <div
+      class="playlist-icon"
+      onclick="window.location.href='/playlists';"
+      title="내 플레이리스트 보기"
+    >
+      <i class="fa-solid fa-record-vinyl"></i>
+    </div>
+  </div>
+</body>
+</html>

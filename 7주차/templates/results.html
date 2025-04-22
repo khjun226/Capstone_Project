@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>"{{ query }}" 검색 결과</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
+</head>
+<body>
+  <div class="container results-page">
+    <h1>"{{ query }}" 검색 결과</h1>
+    <div class="results-grid">
+      {% for track in results %}
+      <div class="result-card">
+        {% if track.album.images and track.album.images[0].url %}
+          <img src="{{ track.album.images[0].url }}" alt="앨범 커버">
+        {% else %}
+          <img src="{{ url_for('static','placeholder.jpg') }}" alt="앨범 없음">
+        {% endif %}
+        <div class="track-name">{{ track.name }}</div>
+        <div class="artist-name">
+          {% for artist in track.artists %}
+            {{ artist.name }}{% if not loop.last %}, {% endif %}
+          {% endfor %}
+        </div>
+
+        <form class="add-playlist-form"
+              action="{{ url_for('add_to_playlist') }}"
+              method="POST">
+          <!-- app.py 에 맞춘 필드명 -->
+          <input type="hidden" name="song_id"     value="{{ track.id }}">
+          <input type="hidden" name="preview_url" value="{{ track.preview_url }}">
+          <input type="hidden" name="title"       value="{{ track.name }}">
+          <input type="hidden" name="artist"      value="{% for a in track.artists %}{{ a.name }}{% if not loop.last %}, {% endif %}{% endfor %}">
+          <input type="hidden" name="thumbnail"   value="{{ track.album.images[0].url if track.album.images }}">
+          <!-- 추가 후 되돌아올 URL -->
+          <input type="hidden" name="next"        value="{{ request.url }}">
+          <input type="hidden" name="playlist_name" class="playlist-name-field">
+          <button type="button" class="card-btn add-btn"> 플레이리스트에 추가</button>
+          <a href="{{ url_for('track_detail', track_id=track.id) }}"
+             class="card-btn recommendation-btn">추천 곡 보기</a>
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+
+    <p>
+      <a class="card-btn" href="{{ url_for('index') }}">다시 검색하기</a>
+    </p>
+    <p>
+      <a class="card-btn" href="{{ url_for('playlists') }}">플레이리스트 목록 보기</a>
+    </p>
+  </div>
+
+  <script>
+    document.querySelectorAll('.add-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        let playlistName = prompt(
+          "추가할 플레이리스트 이름을 입력하세요.\n" +
+          "(기존 이름을 입력하면 해당 플레이리스트에 추가됩니다.)", ""
+        );
+        if (playlistName === null) return;
+        if (playlistName.trim() === "") playlistName = "default";
+        const form = btn.closest('.add-playlist-form');
+        form.querySelector('.playlist-name-field').value = playlistName.trim();
+        form.submit();
+      });
+    });
+  </script>
+</body>
+</html>

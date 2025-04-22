@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+  <title>{{ playlist_name }} 플레이어 | My Playstify</title>
+
+  <!-- 캐시 무효화 -->
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0"/>
+  <meta http-equiv="Pragma"        content="no-cache"/>
+  <meta http-equiv="Expires"       content="0"/>
+
+  <!-- 공통 스타일 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}"/>
+
+  <!-- YouTube IFrame API 콜백 & 컨트롤 스크립트 -->
+  <script>
+    var playlist       = {{ video_ids|tojson }},
+        tracks         = {{ tracks|tojson }},
+        currentIndex   = 0,
+        player,
+        timerInterval = null;
+
+    function onYouTubeIframeAPIReady() {
+      if (!playlist.length) return;
+      player = new YT.Player('hidden-player', {
+        videoId: playlist[currentIndex],
+        playerVars: { playsinline: 1 },
+        events: {
+          onReady:       onPlayerReady,
+          onStateChange: onPlayerStateChange
+        }
+      });
+      attachControls();
+    }
+
+    function onPlayerReady() {
+      updateMetadata();
+      startTimer();
+    }
+
+    function onPlayerStateChange(e) {
+      var btn = document.getElementById('play-btn');
+      if (e.data === YT.PlayerState.PLAYING) {
+        btn.textContent = '⏸️';
+        startTimer();
+      } else {
+        btn.textContent = '▶️';
+        stopTimer();
+      }
+    }
+
+    // 제목만 한 줄로 표시
+    function updateMetadata() {
+      var m = tracks[currentIndex];
+      document.getElementById('track-title').textContent = m.title;
+      document.getElementById('album-cover').src = m.thumbnail || '';
+    }
+
+    function startTimer() {
+      stopTimer();
+      var prog  = document.getElementById('progress-bar'),
+          cur   = document.getElementById('current-time'),
+          durEl = document.getElementById('duration'),
+          total = player.getDuration() || 0;
+      durEl.textContent = formatTime(total);
+      timerInterval = setInterval(function() {
+        if (player.getPlayerState() !== YT.PlayerState.PLAYING) return;
+        var now = player.getCurrentTime() || 0;
+        prog.value      = total ? (now / total) * 100 : 0;
+        cur.textContent = formatTime(now);
+      }, 500);
+    }
+
+    function stopTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+    }
+
+    function attachControls() {
+      document.getElementById('play-btn').onclick = function() {
+        var s = player.getPlayerState();
+        if (s === YT.PlayerState.PLAYING) player.pauseVideo();
+        else player.playVideo();
+      };
+      document.getElementById('prev-btn').onclick = function() { changeTrack(-1); };
+      document.getElementById('next-btn').onclick = function() { changeTrack(1); };
+      document.getElementById('progress-bar').oninput = function() {
+        var total = player.getDuration() || 0,
+            to    = total * (this.value / 100);
+        player.seekTo(to, true);
+      };
+    }
+
+    function changeTrack(dir) {
+      stopTimer();
+      currentIndex = (currentIndex + dir + playlist.length) % playlist.length;
+      player.loadVideoById(playlist[currentIndex]);
+      updateMetadata();
+      startTimer();
+    }
+
+    function formatTime(sec) {
+      var m = Math.floor(sec / 60),
+          s = Math.floor(sec % 60);
+      return m + ':' + ('0' + s).slice(-2);
+    }
+  </script>
+
+  <!-- YouTube IFrame API 스크립트 로드 -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <style>#hidden-player { display: none; }</style>
+</head>
+<body>
+  <!-- 뒤로 가기 -->
+  <p style="padding:1rem;">
+    <a class="btn" href="{{ url_for('playlist_detail', playlist_name=playlist_name) }}">
+      ◀︎ 플레이리스트로 돌아가기
+    </a>
+  </p>
+
+  <!-- 숨겨진 YouTube IFrame -->
+  <div id="hidden-player"></div>
+
+  <!-- 커스텀 플레이어 UI -->
+  <div class="player-container">
+    <div class="album-art">
+      <img
+        id="album-cover"
+        src="{{ tracks[0].thumbnail or url_for('static', filename='placeholder.jpg') }}"
+        alt="앨범 커버" />
+    </div>
+    <div class="track-info">
+      <!-- 제목만 중앙에 표시 -->
+      <h2 id="track-title" style="text-align: center;"></h2>
+    </div>
+    <div class="progress-container">
+      <span id="current-time">0:00</span>
+      <input type="range" id="progress-bar" min="0" max="100" value="0"/>
+      <span id="duration">0:00</span>
+    </div>
+    <div class="controls">
+      <button id="prev-btn" class="control-btn">⏮</button>
+      <button id="play-btn" class="control-btn">▶️</button>
+      <button id="next-btn" class="control-btn">⏭</button>
+    </div>
+  </div>
+</body>
+</html>
